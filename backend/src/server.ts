@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
+import http from "http";
 import tickerRoutes from "./routes/tickers.js";
+import { setupWebSocketServer } from "./websocket/wsServer.js";
 
 const app = express();
 
@@ -18,7 +20,10 @@ app.get("/health", (_req, res) => {
 app.use("/api/tickers", tickerRoutes);
 
 const PORT = 3000;
+const server = http.createServer(app);
 
-app.listen(PORT, () => {
+setupWebSocketServer(server);
+
+server.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 });
