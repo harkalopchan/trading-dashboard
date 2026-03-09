@@ -269,19 +269,6 @@ http://localhost:5173
 
 Basic backend unit tests are included to validate the market simulator and API routes.
 
-The tests are located in:
-
-```
-backend/tests
-```
-
-Current test files:
-
-```
-marketSimulator.test.ts   → tests the mock market data simulator
-tickersRoutes.test.ts     → tests REST API routes for tickers and historical data
-```
-
 ### Run backend tests
 
 ```bash
