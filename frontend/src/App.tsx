@@ -5,6 +5,7 @@ import type { TickerSymbol, Ticker, PricePoint } from './types/market';
 import { useTickerHistory } from './hooks/useTickerHistory';
 import { useTickerStream } from './hooks/useTickerStream';
 import { TickerList } from './components/ticker/TickerList';
+import { PriceChart } from './components/chart/PriceChart';
 
 export default function App() {
 
@@ -81,15 +82,12 @@ export default function App() {
         {isHistoryLoading ? <p>Loading history...</p> : null}
         {isHistoryError ? <p>Failed to load history</p> : null}
 
-        {liveHistory.length > 0 ? (
-          <ul>
-            {history.slice(-5).map((point) => (
-              <li key={point.timestamp}>
-                {point.symbol} - {new Date(point.timestamp).toLocaleString()} - {point.price}
-              </li>
-            ))}
-          </ul>
-        ) : null}
+        {!isHistoryLoading && !isHistoryError && (
+          <PriceChart
+            data={liveHistory}
+            symbol={activeSymbol}
+          />
+        )}
       </section>
     </main>
   )
