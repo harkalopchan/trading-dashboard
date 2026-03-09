@@ -1,8 +1,10 @@
 import axios from "axios";
 import type { Ticker, TickerSymbol, PricePoint } from "../types/market";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const api = axios.create({
-    baseURL: "http://localhost:3000/api",
+    baseURL: API_BASE_URL,
 });
 
 export const fetchTickers = async () : Promise<Ticker[]> => {

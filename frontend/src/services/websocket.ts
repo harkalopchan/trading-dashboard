@@ -1,6 +1,6 @@
 import type { LivePriceMessage } from "../types/market";
 
-const WS_URL = "ws://localhost:3000";
+const WS_URL = import.meta.env.VITE_WS_URL
 
 export const createMarketWebSocket = (
     onMessage: (message: LivePriceMessage) => void
