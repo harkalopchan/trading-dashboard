@@ -7,6 +7,20 @@ import { PriceChart } from "../chart/PriceChart";
 import { TickerList } from "../ticker/TickerList";
 import "../../styles/dashboard.css";
 
+const MAX_CHART_POINTS = 50;
+
+const mergeHistoryPoints = (
+    currentHistory: PricePoint[],
+    incomingPoint: PricePoint
+): PricePoint[] => {
+    const lastPoint = currentHistory[currentHistory.length - 1];
+
+    if (lastPoint && lastPoint.timestamp === incomingPoint.timestamp && lastPoint.symbol === incomingPoint.symbol) {
+        return currentHistory;
+    }
+    return [...currentHistory, incomingPoint].slice(-MAX_CHART_POINTS);
+};
+
 export const Dashboard = () => {
     const {
         data: tickers = [],
@@ -37,8 +51,8 @@ export const Dashboard = () => {
     }, [tickers]);
 
     useEffect(() => {
-        setLiveHistory(history);
-    }, [history]);
+        setLiveHistory(history.slice(-MAX_CHART_POINTS));
+    }, [history, activeSymbol]);
 
     useEffect(() => {
         if (!latestMessage) return;
@@ -49,11 +63,12 @@ export const Dashboard = () => {
             });
         });
 
-        if (latestMessage.symbol === activeSymbol) {
-            setLiveHistory((currentHistory) => {
-                return [...currentHistory, latestMessage].slice(-50);
-            });
+        if (latestMessage.symbol !== activeSymbol) {
+            return;
         }
+
+        setLiveHistory((currentHistory) => mergeHistoryPoints(currentHistory, latestMessage));
+        
     }, [latestMessage, activeSymbol]);
 
     return (
