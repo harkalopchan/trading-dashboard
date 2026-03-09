@@ -1,8 +1,9 @@
 import { useTickers } from './hooks/useTickers';
 import './App.css'
-import { useMemo, useState } from 'react';
-import type { TickerSymbol } from './types/market';
+import { useEffect, useMemo, useState } from 'react';
+import type { TickerSymbol, Ticker, PricePoint } from './types/market';
 import { useTickerHistory } from './hooks/useTickerHistory';
+import { useTickerStream } from './hooks/useTickerStream';
 
 export default function App() {
 
@@ -14,8 +15,12 @@ export default function App() {
 
   const [selectedSymbol, setSelectedSymbol] = useState<TickerSymbol | undefined>(undefined);
 
+  const [liveTickers, setLiveTickers] = useState<Ticker[]>([]);
+  const [liveHistory, setLiveHistory] = useState<PricePoint[]>([]);
+
   const activeSymbol = useMemo(() => {
     if (selectedSymbol) return selectedSymbol;
+
     return tickers[0]?.symbol;
   }, [selectedSymbol, tickers]);
 
@@ -25,8 +30,35 @@ export default function App() {
     isError: isHistoryError
   } = useTickerHistory(activeSymbol);
 
+  const { latestMessage } = useTickerStream();
+
+  useEffect(() => {
+    setLiveTickers(tickers);
+  }, [tickers])
+
+  useEffect(() => {
+    setLiveHistory(history);
+  }, [history])
+
+  useEffect(() => {
+    if (!latestMessage) return;
+
+    setLiveTickers((currentTickers) => {
+      return currentTickers.map((ticker) => {
+        return ticker.symbol === latestMessage.symbol ? { ...ticker, price: latestMessage.price } : ticker;
+      });
+    });
+
+    if (latestMessage.symbol === activeSymbol) {
+      setLiveHistory((currentHistory) => {
+        return [...currentHistory, latestMessage].slice(-50);
+      });
+    }
+  }, [latestMessage, activeSymbol]);
+
   return (
     <main>
+
       <h1>Real-Time Trading Dashboard</h1>
 
       {isTickersLoading ? <p>Loading tickers...</p> : null}
@@ -36,9 +68,9 @@ export default function App() {
         <strong>Selected ticker:</strong> {activeSymbol ?? "None"}
       </div>
 
-      {tickers.length > 0 && (
+      {liveTickers.length > 0 && (
         <ul>
-          {tickers.map((ticker) => (
+          {liveTickers.map((ticker) => (
             <li key={ticker.symbol}>
               <button
                 type="button"
@@ -56,9 +88,11 @@ export default function App() {
 
       <section style={{ margin: "16px 0" }}>
         <h2>Ticker History</h2>
+
         {isHistoryLoading ? <p>Loading history...</p> : null}
         {isHistoryError ? <p>Failed to load history</p> : null}
-        {history.length > 0 ? (
+
+        {liveHistory.length > 0 ? (
           <ul>
             {history.slice(-5).map((point) => (
               <li key={point.timestamp}>
