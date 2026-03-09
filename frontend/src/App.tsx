@@ -1,13 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
+import { useTickers } from './hooks/useTickers';
 import './App.css'
-import { fetchTickers } from './services/api';
 
 export default function App() {
 
-  const { data: tickers = [], isLoading, isError } = useQuery({
-    queryKey: ['tickers'],
-    queryFn: fetchTickers,
-  });
+  const { data: tickers = [], isLoading, isError } = useTickers();
 
   return (
     <main>
