@@ -3,6 +3,8 @@
 A real-time cryptocurrency and stock ticker dashboard built with **React + TypeScript**, powered by a **Node.js WebSocket + REST API backend**.  
 The application streams live price updates and visualizes them in an interactive chart.
 
+![Trading Dashboard](assets/dashboard.jpg)
+
 This project demonstrates:
 
 - Real-time data streaming
