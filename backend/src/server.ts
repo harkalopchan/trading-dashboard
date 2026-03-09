@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import tickerRoutes from "./routes/tickers.js";
 
 const app = express();
 
@@ -13,6 +14,8 @@ app.get("/", (_req, res) => {
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
+
+app.use("/api/tickers", tickerRoutes);
 
 const PORT = 3000;
 
