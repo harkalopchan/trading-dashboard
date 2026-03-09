@@ -13,10 +13,13 @@ export const TickerList = ({
     onSelect
 }: TickerListProps) => {
     return (
-        <section style={{ margin: "16px 0" }}>
-            <h2>Ticker List</h2>
+        <section className="ticker-list-section">
+            <div className="section-heading">
+                <h2 className="section-title">Ticker list</h2>
+                <p className="section-subtitle">Select an instrument to view live chart data</p>
+            </div>
             {tickers.length > 0 ? (
-                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                <ul className="ticker-list">
                     {tickers.map((ticker) => (
                         <TickerListItem
                             key={ticker.symbol}

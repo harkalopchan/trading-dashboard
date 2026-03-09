@@ -1,4 +1,5 @@
 import type { Ticker, TickerSymbol } from "../../types/market";
+import { formatPrice } from "../../utils/format";
 
 interface TickerListItemProps {
     ticker: Ticker;
@@ -12,22 +13,24 @@ export const TickerListItem = ({
     onSelect,
 }: TickerListItemProps) => {
     return (
-        <li key={ticker.symbol}>
+        <li key={ticker.symbol} className="ticker-list-item">
             <button
                 type="button"
                 onClick={() => onSelect(ticker.symbol)}
-                style={{ border: "1px solid #e2e8f0", width: "300px", borderRadius: "4px", padding: "8px", cursor: "pointer", marginBottom: "8px", backgroundColor: isSelected ? "#eff6ff" : "#ffffff" }}>
-                {ticker.symbol} - {ticker.name} - {ticker.price}
+                className={`ticker-button ${isSelected ? "ticker-button--selected" : ""}`}
+            >
+                <div className="ticker-button-top">
+                    <strong className="ticker-button-symbol">{ticker.symbol}</strong>
+                    <span className="ticker-button-price">
+                        {formatPrice(ticker.price)}
+                    </span>
+                </div>
+
+                <div className="ticker-button-bottom">
+                    <span className="ticker-button-name">{ticker.name}</span>
+                </div>
             </button>
-            <div>
-                <strong>{ticker.symbol}</strong>
-            </div>
-            <div>
-                {ticker.name}
-            </div>
-            <div>
-                {ticker.price}
-            </div>
+
         </li>
     );
 };
