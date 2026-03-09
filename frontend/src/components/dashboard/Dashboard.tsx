@@ -74,7 +74,7 @@ export const Dashboard = () => {
     return (
         <main className="dashboard-page">
             <header className="dashboard-header">
-                <h1 className="dashboard-header-title">Real-Time Trading Dashboard</h1>
+                <h1 className="dashboard-title">Real-Time Trading Dashboard</h1>
                 <p className="dashboard-subtitle">Live market prices with REST history and WebSocket updates</p>
             </header>
 
