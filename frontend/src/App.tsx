@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { TickerSymbol, Ticker, PricePoint } from './types/market';
 import { useTickerHistory } from './hooks/useTickerHistory';
 import { useTickerStream } from './hooks/useTickerStream';
+import { TickerList } from './components/ticker/TickerList';
 
 export default function App() {
 
@@ -68,26 +69,14 @@ export default function App() {
         <strong>Selected ticker:</strong> {activeSymbol ?? "None"}
       </div>
 
-      {liveTickers.length > 0 && (
-        <ul>
-          {liveTickers.map((ticker) => (
-            <li key={ticker.symbol}>
-              <button
-                type="button"
-                onClick={() => setSelectedSymbol(ticker.symbol)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "8px",
-                  backgroundColor: selectedSymbol === ticker.symbol ? "lightblue" : "white",
-                }}
-              >{ticker.symbol} - {ticker.name} - {ticker.price}</button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <TickerList
+        tickers={liveTickers}
+        selectedSymbol={activeSymbol}
+        onSelect={setSelectedSymbol}
+      />
 
       <section style={{ margin: "16px 0" }}>
-        <h2>Ticker History</h2>
+        <h2>Live History Preview</h2>
 
         {isHistoryLoading ? <p>Loading history...</p> : null}
         {isHistoryError ? <p>Failed to load history</p> : null}
