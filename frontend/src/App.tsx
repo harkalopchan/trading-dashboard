@@ -1,29 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import './App.css'
-import type { Ticker } from './types/market';
 import { fetchTickers } from './services/api';
 
 export default function App() {
 
-  const [tickers, setTickers] = useState<Ticker[]>([]);
-  const [error, setError] = useState<string>("");
-
-  useEffect(() => {
-    const loadTickers = async () => {
-      try {
-        const data = await fetchTickers();
-        setTickers(data);
-      } catch {
-        setError("Failed to load tickers");
-      }
-    };
-    loadTickers();
-  }, []);
+  const { data: tickers = [], isLoading, isError } = useQuery({
+    queryKey: ['tickers'],
+    queryFn: fetchTickers,
+  });
 
   return (
     <main>
       <h1>Real-Time Trading Dashboard</h1>
-      {error && <p className="error">{error}</p>}
+      
+      {isLoading ? <p>Loading tickers...</p>: null}
+      {isError ? <p>Failed to load tickers</p> : null}
+
       {tickers.length > 0 && (
         <ul>
           {tickers.map((ticker) => (
@@ -31,7 +23,7 @@ export default function App() {
           ))}
         </ul>
       )}
-      <p>Frontend setup complete with API, caching, and chart dependencies.</p>
+
     </main>
   )
 }
