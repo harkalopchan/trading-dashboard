@@ -46,6 +46,9 @@ trading-dashboard
 │   │   │   └── marketStream.ts
 │   │   └── types
 │   │       └── market.ts
+│   ├── tests
+│   │   ├── marketSimulator.test.ts
+│   │   └── tickersRoutes.test.ts
 │   │
 │   └── Dockerfile
 │
@@ -259,6 +262,43 @@ Frontend runs on:
 ```
 http://localhost:5173
 ```
+
+
+
+## Running Tests
+
+Basic backend unit tests are included to validate the market simulator and API routes.
+
+The tests are located in:
+
+```
+backend/tests
+```
+
+Current test files:
+
+```
+marketSimulator.test.ts   → tests the mock market data simulator
+tickersRoutes.test.ts     → tests REST API routes for tickers and historical data
+```
+
+### Run backend tests
+
+```bash
+cd backend
+npm install
+npm test
+```
+
+The test suite runs using **Vitest**.
+
+These tests verify:
+
+- Market price simulation logic
+- Correct behavior of ticker REST API endpoints
+- Historical data responses
+- Stability of the mock data generator
+
 
 
 
